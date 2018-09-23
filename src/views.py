@@ -1,7 +1,7 @@
 from flask import render_template, request, session, redirect, url_for, json
 from src import app
 import requests
-from src.utils import authorized, admin
+from src.utils import authorized, admin, get_role
 
 
 BASE_URL = 'http://localhost:8080/rental/api/'
@@ -20,7 +20,9 @@ def login():
         r = requests.post(f'{BASE_URL}user/authenticate',
                           data={'email': request.form['email'], 'password': request.form['password']})
         if r.status_code == 200:
-            session['token'] = r.text
+            token = r.text
+            session['token'] = token
+            session['role'] = get_role(token)
             return redirect('/')
         elif r.status_code == 401:
             return render_template('login.html', message=r.text)
@@ -46,6 +48,7 @@ def register():
 @authorized
 def logout():
     session.pop('token', None)
+    session.pop('role', None)
     return redirect(url_for('login'))
 
 
@@ -60,11 +63,22 @@ def all_users():
 @app.route('/delete/user/<id>')
 @admin
 def delete_user(id):
-    r = requests.delete(f'{BASE_URL}remove/user/{id}', headers={'Authorization': session['token']})
+    r = requests.delete(f'{BASE_URL}delete/user/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
         return redirect('/users')
 
-@app.route('/protected')
+
+@app.route('/rooms/all')
 @admin
-def protected():
-    return 'logged in'
+def all_rooms():
+    r = requests.get(f'{BASE_URL}room/all', headers={'Authorization': session['token']})
+    if r.status_code == 200:
+        return render_template('all_rooms.html', rooms=json.loads(r.text))
+
+
+@app.route('/delete/room/<id>')
+@admin
+def delete_room(id):
+    r = requests.delete(f'{BASE_URL}delete/room/{id}', headers={'Authorization': session['token']})
+    if r.status_code == 204:
+        return redirect('/rooms/all')

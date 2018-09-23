@@ -6,21 +6,33 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a href="{{ url_for('login') }}" class="nav-link">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('register') }}" class="nav-link">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('protected') }}" class="nav-link">test</a>
-                </li>
-                <li class="nav-item">
-                    <a href="/users" class="nav-link">All users</a>
-                </li>
+                {% if not session['token'] %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('register') }}" class="nav-link">Register</a>
+                    </li>
+                {% endif %}
+                {% if session['role'] == 'admin' %}
+                    <li class="nav-item">
+                        <a href="/users" class="nav-link">All users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/rooms/all" class="nav-link">All rooms</a>
+                    </li>
+                {% endif %}
+                {% if session['role'] == 'student' %}
+                    {#student links#}
+                {% endif %}
+                {% if session['role'] == 'landlord' %}
+                    {#landlord links#}
+                {% endif %}
+                {% if session['token'] %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
