@@ -1,14 +1,15 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <form class="text-center w-25">
+    <form class="text-center w-25" action="{{ url_for('login') }}" method="post">
         <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                   placeholder="Enter email">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email"
+                   placeholder="Enter email" value="admin@ad.min" name="email">
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password"
+                   placeholder="Password" value="admin" name="password">
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
     </form>

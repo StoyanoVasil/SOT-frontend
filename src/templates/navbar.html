@@ -7,10 +7,13 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="/login" class="nav-link">Login</a>
+                    <a href="{{ url_for('login') }}" class="nav-link">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/register" class="nav-link">Register</a>
+                    <a href="{{ url_for('register') }}" class="nav-link">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
                 </li>
             </ul>
         </div>
