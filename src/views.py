@@ -3,4 +3,4 @@ from src import app
 
 @app.route('/')
 def index():
-    return 'Hello sot'
+    return render_template('index.html')
