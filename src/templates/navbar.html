@@ -23,7 +23,9 @@
                     </li>
                 {% endif %}
                 {% if session['role'] == 'student' %}
-                    {#student links#}
+                    <li class="nav-item">
+                        <a href="/rooms/free" class="nav-link">Rooms</a>
+                    </li>
                 {% endif %}
                 {% if session['role'] == 'landlord' %}
                     {#landlord links#}

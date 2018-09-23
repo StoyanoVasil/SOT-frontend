@@ -35,8 +35,8 @@ def register():
     if request.method == 'POST':
         data = request.form
         r = requests.post(f'{BASE_URL}new/user',
-                          data={'email': data['email'], 'name': data['name'],
-                                'password': data['email'], 'role': data['role']})
+                          data={'email': data['email'].lower(), 'name': data['name'],
+                                'password': data['password'], 'role': data['role'].lower()})
         if r.status_code == 201:
             session['token'] = r.text
             return redirect('/')
@@ -82,3 +82,11 @@ def delete_room(id):
     r = requests.delete(f'{BASE_URL}delete/room/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
         return redirect('/rooms/all')
+
+
+@app.route('/rooms/free')
+@authorized
+def get_free_rooms():
+    r = requests.get(f'{BASE_URL}room/free', headers={'Authorization': session['token']})
+    if r.status_code == 200:
+        return render_template('free_rooms.html', rooms=json.loads(r.text))

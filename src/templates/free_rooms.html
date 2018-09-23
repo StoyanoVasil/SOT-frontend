@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col" class="text-center">Address</th>
+            <th scope="col" class="text-center">City</th>
+            <th scope="col" class="text-center">Landlord</th>
+            <th scope="col" class="text-center">Rent</th>
+            <th scope="col" class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for room in rooms %}
+            <tr>
+                <th class="text-center">{{ loop.index }}</th>
+                <td class="text-center">{{ room['address'] }}</td>
+                <td class="text-center">{{ room['city'] }}</td>
+                <td class="text-center">{{ room['landlord'] }}</td>
+                <td class="text-center">{{ room['rent'] }}</td>
+                <td class="text-center">
+                    <a class="btn btn-info" href="/book/room/{{ room['id'] }}">Book</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
