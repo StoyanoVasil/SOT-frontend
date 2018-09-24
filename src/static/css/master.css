@@ -15,3 +15,7 @@ html, body {
     height: 90%;
     width: 100%;
 }
+
+.top-space {
+    margin-top: 1%;
+}

@@ -1,5 +1,16 @@
 {% extends 'layout.html' %}
 {% block body %}
+    <div class="col-lg-12 top-space">
+        <form action="/rooms/free" method="post">
+            <div class="input-group mb-3">
+                <input name="city" type="text" class="form-control" placeholder="Search by city"
+                       aria-label="Search by city" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>

@@ -87,12 +87,18 @@ def delete_room(id):
         return redirect('/rooms/all')
 
 
-@app.route('/rooms/free')
+@app.route('/rooms/free', methods=['GET', 'POST'])
 @authorized
 def get_free_rooms():
-    r = requests.get(f'{BASE_URL}room/free', headers={'Authorization': session['token']})
-    if r.status_code == 200:
-        return render_template('free_rooms.html', rooms=json.loads(r.text))
+    if request.method == 'GET':
+        r = requests.get(f'{BASE_URL}room/free', headers={'Authorization': session['token']})
+        if r.status_code == 200:
+            return render_template('free_rooms.html', rooms=json.loads(r.text))
+    if request.method == 'POST':
+        city = request.form['city']
+        r = requests.get(f'{BASE_URL}room/city?city={city}', headers={'Authorization': session['token']})
+        if r.status_code == 200:
+            return render_template('free_rooms.html', rooms=json.loads(r.text))
 
 
 @app.route('/book/room/<id>')
@@ -101,3 +107,10 @@ def book_room(id):
     r = requests.get(f'{BASE_URL}book/room/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
         return redirect('/rooms/free') #redirect to my bookings
+
+
+@app.route('/bookings')
+def user_bookings():
+    r = requests.get(f'{BASE_URL}room/tenant', headers={'Authorization': session['token']})
+    if r.status_code == 200:
+        return render_template('', rooms=json.loads(r.text)) #TODO: make template
