@@ -19,3 +19,7 @@ html, body {
 .top-space {
     margin-top: 1%;
 }
+
+.main-color {
+    color: rgb(63,108,147);
+}

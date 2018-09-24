@@ -106,11 +106,13 @@ def get_free_rooms():
 def book_room(id):
     r = requests.get(f'{BASE_URL}book/room/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
-        return redirect('/rooms/free') #redirect to my bookings
+        return redirect('/bookings')
 
 
 @app.route('/bookings')
 def user_bookings():
     r = requests.get(f'{BASE_URL}room/tenant', headers={'Authorization': session['token']})
     if r.status_code == 200:
-        return render_template('', rooms=json.loads(r.text)) #TODO: make template
+        return render_template('bookings.html', rooms=json.loads(r.text))
+    if r.status_code == 404:
+        return render_template('bookings.html', message='No rooms booked')
