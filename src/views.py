@@ -38,7 +38,9 @@ def register():
                           data={'email': data['email'].lower(), 'name': data['name'],
                                 'password': data['password'], 'role': data['role'].lower()})
         if r.status_code == 201:
-            session['token'] = r.text
+            token = r.text
+            session['token'] = token
+            session['role'] = get_role(token)
             return redirect('/')
         elif r.status_code == 409:
             return render_template('register.html', message=r.text)
@@ -98,4 +100,4 @@ def get_free_rooms():
 def book_room(id):
     r = requests.get(f'{BASE_URL}book/room/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
-        return redirect('/') #redirect to my bookings
+        return redirect('/rooms/free') #redirect to my bookings
