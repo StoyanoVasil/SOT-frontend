@@ -9,6 +9,7 @@
             <th scope="col" class="text-center">Landlord</th>
             <th scope="col" class="text-center">Rent</th>
             <th scope="col" class="text-center">Status</th>
+            <th scope="col" class="text-center">Tenant</th>
             <th scope="col" class="text-center">Actions</th>
         </tr>
         </thead>
@@ -21,6 +22,7 @@
                 <td class="text-center">{{ room['landlord'] }}</td>
                 <td class="text-center">{{ room['rent'] }}</td>
                 <td class="text-center">{{ room['status'] }}</td>
+                <td class="text-center">{{ room['tenant'] }}</td>
                 <td class="text-center">
                     <a class="btn btn-danger" href="/delete/room/{{ room['id'] }}">Delete</a>
                 </td>

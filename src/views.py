@@ -1,7 +1,7 @@
 from flask import render_template, request, session, redirect, url_for, json
 from src import app
 import requests
-from src.utils import authorized, admin, get_role
+from src.utils import authorized, admin, get_role, clear_session
 
 
 BASE_URL = 'http://localhost:8080/rental/api/'
@@ -47,8 +47,7 @@ def register():
 @app.route('/logout')
 @authorized
 def logout():
-    session.pop('token', None)
-    session.pop('role', None)
+    clear_session()
     return redirect(url_for('login'))
 
 
@@ -58,6 +57,8 @@ def all_users():
     r = requests.get(f'{BASE_URL}user/all', headers={'Authorization': session['token']})
     if r.status_code == 200:
         return render_template('all_users.html', users=json.loads(r.text))
+    else:
+        return redirect('/login')
 
 
 @app.route('/delete/user/<id>')
@@ -90,3 +91,11 @@ def get_free_rooms():
     r = requests.get(f'{BASE_URL}room/free', headers={'Authorization': session['token']})
     if r.status_code == 200:
         return render_template('free_rooms.html', rooms=json.loads(r.text))
+
+
+@app.route('/book/room/<id>')
+@authorized
+def book_room(id):
+    r = requests.get(f'{BASE_URL}book/room/{id}', headers={'Authorization': session['token']})
+    if r.status_code == 204:
+        return redirect('/') #redirect to my bookings
