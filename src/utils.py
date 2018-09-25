@@ -9,7 +9,7 @@ def authorized(f):
         if 'token' in session:
             if __decode_token(session['token']):
                 return f(*args, **kwargs)
-        return redirect('/')
+        return redirect(url_for('index', message='Not authorized!'))
     return decorated_function
 
 
@@ -20,7 +20,7 @@ def admin(f):
             decoded = __decode_token(session['token'])
             if decoded and decoded['sub'] == 'admin':
                 return f(*args, **kwargs)
-        return redirect('/')
+        return redirect(url_for('index', message='Not authorized!'))
     return decorated_function
 
 

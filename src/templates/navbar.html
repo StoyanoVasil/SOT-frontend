@@ -16,18 +16,18 @@
                 {% endif %}
                 {% if session['role'] == 'admin' %}
                     <li class="nav-item">
-                        <a href="/users" class="nav-link">All users</a>
+                        <a href="{{ url_for('all_users') }}" class="nav-link">All users</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/rooms/all" class="nav-link">All rooms</a>
+                        <a href="{{ url_for('all_rooms') }}" class="nav-link">All rooms</a>
                     </li>
                 {% endif %}
                 {% if session['role'] == 'student' %}
                     <li class="nav-item">
-                        <a href="/rooms/free" class="nav-link">Rooms</a>
+                        <a href="{{ url_for('free_rooms') }}" class="nav-link">Rooms</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/bookings" class="nav-link">Bookings</a>
+                        <a href="{{ url_for('user_bookings') }}" class="nav-link">Bookings</a>
                     </li>
                 {% endif %}
                 {% if session['role'] == 'landlord' %}
