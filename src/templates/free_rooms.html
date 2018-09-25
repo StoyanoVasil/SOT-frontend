@@ -31,7 +31,7 @@
                 <td class="text-center">{{ room['landlord'] }}</td>
                 <td class="text-center">{{ room['rent'] }}</td>
                 <td class="text-center">
-                    <a class="btn btn-info" href="/book/room/{{ room['id'] }}">Book</a>
+                    <a class="btn btn-info" href="{{ url_for('book_room', id=room['id']) }}">Book</a>
                 </td>
             </tr>
         {% endfor %}

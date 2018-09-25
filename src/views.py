@@ -25,7 +25,7 @@ def login():
             token = r.text
             session['token'] = token
             session['role'] = get_role(token)
-            return redirect('/')
+            return redirect(url_for('index'))
         elif r.status_code == 401:
             return render_template('login.html', message=r.text)
 
@@ -43,7 +43,7 @@ def register():
             token = r.text
             session['token'] = token
             session['role'] = get_role(token)
-            return redirect('/')
+            return redirect(url_for('index'))
         elif r.status_code == 409:
             return render_template('register.html', message=r.text)
 
@@ -62,7 +62,7 @@ def all_users():
     if r.status_code == 200:
         return render_template('all_users.html', users=json.loads(r.text))
     else:
-        return redirect('/login')
+        return redirect(url_for('login'))
 
 
 @app.route('/delete/user/<id>')
@@ -70,7 +70,7 @@ def all_users():
 def delete_user(id):
     r = requests.delete(f'{BASE_URL}delete/user/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
-        return redirect('/users')
+        return redirect(url_for('all_users'))
 
 
 @app.route('/rooms/all')
@@ -86,7 +86,7 @@ def all_rooms():
 def delete_room(id):
     r = requests.delete(f'{BASE_URL}delete/room/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
-        return redirect('/rooms/all')
+        return redirect(url_for('all_rooms'))
 
 
 @app.route('/rooms/free', methods=['GET', 'POST'])
@@ -108,7 +108,7 @@ def free_rooms():
 def book_room(id):
     r = requests.get(f'{BASE_URL}book/room/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
-        return redirect('/bookings')
+        return redirect(url_for('user_bookings'))
 
 
 @app.route('/bookings')
@@ -124,9 +124,8 @@ def user_bookings():
 @app.route('/booking/cancel/<id>')
 @authorized
 def cancel_booking(id):
-    #TODO: not working, pls fix
     r = requests.get(f'{BASE_URL}cancel/booking/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
-        return redirect('/bookings')
+        return redirect(url_for('user_bookings'))
     if r.status_code == 404:
-        return redirect('/')
+        return redirect(url_for('index'))

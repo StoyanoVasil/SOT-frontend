@@ -3,7 +3,7 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th scope="col" class="text-center">ID</th>
+            <th scope="col" class="text-center">#</th>
             <th scope="col" class="text-center">Address</th>
             <th scope="col" class="text-center">City</th>
             <th scope="col" class="text-center">Landlord</th>
@@ -16,7 +16,7 @@
         <tbody>
         {% for room in rooms %}
             <tr>
-                <th class="text-center">{{ room['id'] }}</th>
+                <th class="text-center">{{ loop.index }}</th>
                 <td class="text-center">{{ room['address'] }}</td>
                 <td class="text-center">{{ room['city'] }}</td>
                 <td class="text-center">{{ room['landlord'] }}</td>
@@ -24,7 +24,10 @@
                 <td class="text-center">{{ room['status'] }}</td>
                 <td class="text-center">{{ room['tenant'] }}</td>
                 <td class="text-center">
-                    <a class="btn btn-danger" href="/delete/room/{{ room['id'] }}">Delete</a>
+                    <div class="btn-group">
+                        <a class="btn btn-info" href="{{ url_for('book_room', id=room['id']) }}">Book</a>
+                        <a class="btn btn-danger" href="{{ url_for('delete_room', id=room['id']) }}">Delete</a>
+                    </div>
                 </td>
             </tr>
         {% endfor %}
