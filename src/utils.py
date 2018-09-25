@@ -24,6 +24,28 @@ def admin(f):
     return decorated_function
 
 
+def student(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'token' in session:
+            decoded = __decode_token(session['token'])
+            if decoded and (decoded['sub'] == 'admin' or decoded['sub'] == 'student'):
+                return f(*args, **kwargs)
+        return redirect(url_for('index', message='Not authorized!'))
+    return decorated_function
+
+
+def landlord(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'token' in session:
+            decoded = __decode_token(session['token'])
+            if decoded and (decoded['sub'] == 'admin' or decoded['sub'] == 'landlord'):
+                return f(*args, **kwargs)
+        return redirect(url_for('index', message='Not authorized!'))
+    return decorated_function
+
+
 def __decode_token(token):
     try:
         return jwt.decode(token, 'rest_sot_assignment', algorithms=['HS256'])

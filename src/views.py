@@ -1,7 +1,7 @@
 from flask import render_template, request, session, redirect, url_for, json
 from src import app
 import requests
-from src.utils import authorized, admin, get_role, clear_session
+from src.utils import authorized, admin, student, landlord, get_role, clear_session
 
 
 BASE_URL = 'http://localhost:8080/rental/api/'
@@ -27,6 +27,8 @@ def login():
             session['role'] = get_role(token)
             return redirect(url_for('index'))
         elif r.status_code == 401:
+            return render_template('login.html', message=r.text)
+        elif r.status_code == 404:
             return render_template('login.html', message=r.text)
 
 
@@ -82,15 +84,18 @@ def all_rooms():
 
 
 @app.route('/delete/room/<id>')
-@admin
+@landlord
 def delete_room(id):
     r = requests.delete(f'{BASE_URL}delete/room/{id}', headers={'Authorization': session['token']})
     if r.status_code == 204:
-        return redirect(url_for('all_rooms'))
+        if session['role'] == 'admin':
+            return redirect(url_for('all_rooms'))
+        else:
+            return redirect(url_for('my_rooms'))
 
 
 @app.route('/rooms/free', methods=['GET', 'POST'])
-@authorized
+@student
 def free_rooms():
     if request.method == 'GET':
         r = requests.get(f'{BASE_URL}room/free', headers={'Authorization': session['token']})
@@ -104,10 +109,9 @@ def free_rooms():
 
 
 @app.route('/book/room/<id>')
-@authorized
+@student
 def book_room(id):
     r = requests.get(f'{BASE_URL}book/room/{id}', headers={'Authorization': session['token']})
-    print(r.text)
     if r.status_code == 204:
         return redirect(url_for('user_bookings'))
     if r.status_code == 401:
@@ -115,7 +119,7 @@ def book_room(id):
 
 
 @app.route('/bookings')
-@authorized
+@student
 def user_bookings():
     r = requests.get(f'{BASE_URL}room/tenant', headers={'Authorization': session['token']})
     if r.status_code == 200:
@@ -136,3 +140,31 @@ def cancel_booking(id):
         return redirect(url_for('user_bookings'))
     if r.status_code == 404:
         return redirect(url_for('index'))
+
+
+@app.route('/rooms/my')
+@landlord
+def my_rooms():
+    r = requests.get(f'{BASE_URL}room/landlord', headers={'Authorization': session['token']})
+    if r.status_code == 200:
+        return render_template('my_rooms.html', rooms=json.loads(r.text))
+    if r.status_code == 404:
+        return render_template('my_rooms.html', message='You have no rooms!')
+
+
+@app.route('/new/room', methods=['GET', 'POST'])
+@landlord
+def new_room():
+    if request.method == 'GET':
+        return render_template('new_room.html')
+    if request.method == 'POST':
+        data = request.form
+        r = requests.post(f'{BASE_URL}new/room',
+                          data={'address': data['address'],
+                                'city': data['city'],
+                                'rent': data['rent']},
+                          headers={'Authorization': session['token']})
+        if r.status_code == 201:
+            return redirect(url_for('my_rooms'))
+        if r.status_code == 409:
+            return render_template('new_room.html', message=r.text)

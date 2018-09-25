@@ -31,7 +31,12 @@
                     </li>
                 {% endif %}
                 {% if session['role'] == 'landlord' or session['role'] == 'admin' %}
-                    {#landlord links#}
+                    <li class="nav-item">
+                        <a href="{{ url_for('my_rooms') }}" class="nav-link">My rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('new_room') }}" class="nav-link">New room</a>
+                    </li>
                 {% endif %}
                 {% if session['token'] %}
                     <li class="nav-item">

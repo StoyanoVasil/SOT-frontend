@@ -1,7 +1,11 @@
 {% extends 'layout.html' %}
 {% block body %}
-    {% include 'error.html' %}
     <div class="center">
+        {% if message %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
         <form class="text-center w-25" action="{{ url_for('login') }}" method="post">
             <div class="form-group">
                 <label for="email">Email address</label>

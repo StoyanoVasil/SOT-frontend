@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% block body %}
+    {% include 'error.html' %}
+    {% if rooms %}
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col" class="text-center">Address</th>
+                <th scope="col" class="text-center">City</th>
+                <th scope="col" class="text-center">Rent</th>
+                <th scope="col" class="text-center">Status</th>
+                <th scope="col" class="text-center">Tenant</th>
+                <th scope="col" class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for room in rooms %}
+                <tr>
+                    <th class="text-center">{{ loop.index }}</th>
+                    <td class="text-center">{{ room['address'] }}</td>
+                    <td class="text-center">{{ room['city'] }}</td>
+                    <td class="text-center">{{ room['rent'] }}</td>
+                    <td class="text-center">{{ room['status'] }}</td>
+                    <td class="text-center">{{ room['tenant'] }}</td>
+                    <td class="text-center">
+                        <div class="btn-group">
+                            <a class="btn btn-danger" href="{{ url_for('delete_room', id=room['id']) }}">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
