@@ -9,6 +9,8 @@ BASE_URL = 'http://localhost:8080/rental/api/'
 
 @app.route('/')
 def index():
+    if 'message' in request.args:
+        return render_template('index.html', message=request.args['message'])
     return render_template('index.html')
 
 
@@ -50,7 +52,7 @@ def register():
 @authorized
 def logout():
     clear_session()
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 
 @app.route('/users')
@@ -89,7 +91,7 @@ def delete_room(id):
 
 @app.route('/rooms/free', methods=['GET', 'POST'])
 @authorized
-def get_free_rooms():
+def free_rooms():
     if request.method == 'GET':
         r = requests.get(f'{BASE_URL}room/free', headers={'Authorization': session['token']})
         if r.status_code == 200:
@@ -110,9 +112,21 @@ def book_room(id):
 
 
 @app.route('/bookings')
+@authorized
 def user_bookings():
     r = requests.get(f'{BASE_URL}room/tenant', headers={'Authorization': session['token']})
     if r.status_code == 200:
         return render_template('bookings.html', rooms=json.loads(r.text))
     if r.status_code == 404:
         return render_template('bookings.html', message='No rooms booked')
+
+
+@app.route('/booking/cancel/<id>')
+@authorized
+def cancel_booking(id):
+    #TODO: not working, pls fix
+    r = requests.get(f'{BASE_URL}cancel/booking/{id}', headers={'Authorization': session['token']})
+    if r.status_code == 204:
+        return redirect('/bookings')
+    if r.status_code == 404:
+        return redirect('/')
