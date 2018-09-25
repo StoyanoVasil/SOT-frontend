@@ -48,6 +48,8 @@ def register():
             return redirect(url_for('index'))
         elif r.status_code == 409:
             return render_template('register.html', message=r.text)
+        elif r.status_code == 422:
+            return render_template('register.html', message='Invalid input')
 
 
 @app.route('/logout')
@@ -168,3 +170,11 @@ def new_room():
             return redirect(url_for('my_rooms'))
         if r.status_code == 409:
             return render_template('new_room.html', message=r.text)
+
+
+@app.route('/approve/booking/<id>')
+@landlord
+def approve_booking(id):
+    r = requests.get(f'{BASE_URL}rent/room/{id}', headers={'Authorization': session['token']})
+    if r.status_code == 204:
+        return redirect(url_for('my_rooms'))
