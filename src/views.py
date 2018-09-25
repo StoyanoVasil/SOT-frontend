@@ -107,8 +107,11 @@ def free_rooms():
 @authorized
 def book_room(id):
     r = requests.get(f'{BASE_URL}book/room/{id}', headers={'Authorization': session['token']})
+    print(r.text)
     if r.status_code == 204:
         return redirect(url_for('user_bookings'))
+    if r.status_code == 401:
+        return redirect(url_for('user_bookings', message=r.text))
 
 
 @app.route('/bookings')
@@ -116,9 +119,13 @@ def book_room(id):
 def user_bookings():
     r = requests.get(f'{BASE_URL}room/tenant', headers={'Authorization': session['token']})
     if r.status_code == 200:
-        return render_template('bookings.html', rooms=json.loads(r.text))
+        if 'message' in request.args:
+            return render_template('bookings.html', rooms=json.loads(r.text), message=request.args['message'])
+        else:
+            return render_template('bookings.html', rooms=json.loads(r.text))
     if r.status_code == 404:
-        return render_template('bookings.html', message='No rooms booked')
+        message = 'No rooms booked'
+        return render_template('bookings.html', message=message)
 
 
 @app.route('/booking/cancel/<id>')

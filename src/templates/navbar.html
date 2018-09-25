@@ -22,7 +22,7 @@
                         <a href="{{ url_for('all_rooms') }}" class="nav-link">All rooms</a>
                     </li>
                 {% endif %}
-                {% if session['role'] == 'student' %}
+                {% if session['role'] == 'student' or session['role'] == 'admin' %}
                     <li class="nav-item">
                         <a href="{{ url_for('free_rooms') }}" class="nav-link">Rooms</a>
                     </li>
@@ -30,7 +30,7 @@
                         <a href="{{ url_for('user_bookings') }}" class="nav-link">Bookings</a>
                     </li>
                 {% endif %}
-                {% if session['role'] == 'landlord' %}
+                {% if session['role'] == 'landlord' or session['role'] == 'admin' %}
                     {#landlord links#}
                 {% endif %}
                 {% if session['token'] %}
