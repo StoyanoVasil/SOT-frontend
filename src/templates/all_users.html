@@ -13,7 +13,7 @@
         <tbody>
         {% for user in users %}
             <tr>
-                <th class="text-center">{{ user['id'] }}</th>
+                <th class="text-center">{{ loop.index }}</th>
                 <td class="text-center">{{ user['name'] }}</td>
                 <td class="text-center">{{ user['email'] }}</td>
                 <td class="text-center">{{ user['role'] }}</td>
