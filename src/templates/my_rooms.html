@@ -27,6 +27,7 @@
                         <div class="btn-group">
                             {% if room['status'] == 'booked' %}
                                 <a href="{{ url_for('approve_booking', id = room['id']) }}" class="btn btn-info">Approve</a>
+                                <a href="{{ url_for('cancel_booking', id = room['id']) }}" class="btn btn-warning">Disapprove</a>
                             {% endif %}
                             <a class="btn btn-danger" href="{{ url_for('delete_room', id=room['id']) }}">Delete</a>
                         </div>
