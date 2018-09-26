@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+    <div class="container-fluid">
+        <a href="/" class="navbar-brand"><img src="../static/img/logo.png"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                {% if not session['token'] %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('register') }}" class="nav-link">Register</a>
+                    </li>
+                {% endif %}
+                {% if session['role'] == 'admin' %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('all_users') }}" class="nav-link">All users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('all_rooms') }}" class="nav-link">All rooms</a>
+                    </li>
+                {% endif %}
+                {% if session['role'] == 'student' or session['role'] == 'admin' %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('free_rooms') }}" class="nav-link">Rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('user_bookings') }}" class="nav-link">Bookings</a>
+                    </li>
+                {% endif %}
+                {% if session['role'] == 'landlord' or session['role'] == 'admin' %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('my_rooms') }}" class="nav-link">My rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('new_room') }}" class="nav-link">New room</a>
+                    </li>
+                {% endif %}
+                {% if session['token'] %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

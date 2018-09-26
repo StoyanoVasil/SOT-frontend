@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="text-center">ID</th>
+            <th scope="col" class="text-center">Name</th>
+            <th scope="col" class="text-center">Email</th>
+            <th scope="col" class="text-center">Role</th>
+            <th scope="col" class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <th class="text-center">{{ loop.index }}</th>
+                <td class="text-center">{{ user['name'] }}</td>
+                <td class="text-center">{{ user['email'] }}</td>
+                <td class="text-center">{{ user['role'] }}</td>
+                <td class="text-center">
+                    <a class="btn btn-danger" href="/delete/user/{{ user['id'] }}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
